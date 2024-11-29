@@ -23,7 +23,7 @@ app.get('/redirect', (req, res) => {
     res.redirect(redirectTo); // Vulnerable to open redirects
 });
 
-// Start the server
+// Start the server on port 3000
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
