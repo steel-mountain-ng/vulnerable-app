@@ -24,10 +24,16 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Run Semgrep
-        run: semgrep ci
+        run: semgrep ci --sarif --output=semgrep-results.sarif
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
           SEMGREP_RULES: p/default p/security-audit p/nodejs
+          
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: semgrep-results.sarif
           
       - name: Add PR Comment
         if: github.event_name == 'pull_request'
@@ -37,5 +43,5 @@ jobs:
           message: |
             ### Semgrep Analysis Results
             
-            For detailed results, check the Actions tab.
+            For detailed results, check the Security tab and Actions logs.
             To learn more about the detected issues, visit https://semgrep.dev/docs/

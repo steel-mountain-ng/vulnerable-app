@@ -37,6 +37,27 @@ jobs:
         with:
           project: 'Vulnerable Node.js App'
           path: '.'
+          format: 'SARIF'
+          out: 'reports'
+          args: >
+            --enableExperimental
+            --scan .
+            --suppression ./suppression.xml
+            --failOnCVSS 7
+
+      - name: Upload SARIF file
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: reports/dependency-check-report.sarif
+            
+      - name: Generate HTML Report
+        uses: dependency-check/Dependency-Check_Action@main
+        env:
+          JAVA_HOME: ${{ env.JAVA_HOME }}
+        with:
+          project: 'Vulnerable Node.js App'
+          path: '.'
           format: 'HTML'
           out: 'reports'
           args: >
@@ -45,7 +66,7 @@ jobs:
             --suppression ./suppression.xml
             --failOnCVSS 7
             
-      - name: Upload Test results
+      - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -61,8 +82,8 @@ jobs:
           message: |
             ### OWASP Dependency Check Results
             
-            The full HTML report has been uploaded as a build artifact.
-            To view it:
+            For detailed results, check the Security tab and download the HTML report from Artifacts.
+            To view the report:
             1. Go to the Actions tab
             2. Click on this workflow run
             3. Download the "Dependency Check Report" artifact 
