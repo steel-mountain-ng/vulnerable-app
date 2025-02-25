@@ -6,8 +6,9 @@ WORKDIR /usr/src/app
 
 # Install system packages with known vulnerabilities
 RUN apt-get update && apt-get install -y \
-    imagemagick=8:6.9.10.23+dfsg-2.1 \
-    openssh-server=1:8.2p1-4 \
+    imagemagick \
+    openssh-server \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package files
