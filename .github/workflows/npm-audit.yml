@@ -1,0 +1,56 @@
+name: NPM Audit
+
+on:
+  workflow_dispatch: {}
+  pull_request: {}
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly scan
+
+jobs:
+  audit:
+    name: NPM Dependency Scan
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Run NPM Audit
+        run: npm audit --json > npm-audit.json || true
+
+      - name: Process Audit Results
+        run: |
+          echo "### NPM Audit Summary" > audit-summary.md
+          echo "" >> audit-summary.md
+          
+          if [ -s npm-audit.json ]; then
+            echo "\`\`\`" >> audit-summary.md
+            jq -r '.metadata.vulnerabilities | to_entries | .[] | select(.value > 0) | "\(.key): \(.value)"' npm-audit.json >> audit-summary.md
+            echo "\`\`\`" >> audit-summary.md
+            
+            echo "" >> audit-summary.md
+            echo "### Detailed Vulnerabilities" >> audit-summary.md
+            echo "" >> audit-summary.md
+            jq -r '.vulnerabilities | to_entries[] | .value | "- **\(.title)** (\(.severity))\n  - Package: \(.name)\n  - Version: \(.range)\n  - Fix available: \(.fixAvailable)\n  - More info: \(.url)\n"' npm-audit.json >> audit-summary.md
+          else
+            echo "No vulnerabilities found!" >> audit-summary.md
+          fi
+
+      - name: Create PR Comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: npm-audit-results
+          path: audit-summary.md 
