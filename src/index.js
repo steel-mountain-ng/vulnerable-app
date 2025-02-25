@@ -40,7 +40,7 @@ app.post('/login', (req, res) => {
 // Command Injection - CWE-78
 app.get('/ping', (req, res) => {
     const host = req.query.host;
-    child_process.exec(`ping -c 4 ${host}`, (error, stdout) => {
+    child_process.execFile('ping', ['-c', '4', host], (error, stdout) => {
         res.send(stdout);
     });
 });
