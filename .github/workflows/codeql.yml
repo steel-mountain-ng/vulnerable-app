@@ -5,7 +5,7 @@ on:
   pull_request: {}
   push:
     branches:
-      - main
+      - segunfunmi
   schedule:
     - cron: '30 0 * * *'
 
