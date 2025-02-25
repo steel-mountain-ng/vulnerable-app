@@ -1,0 +1,59 @@
+name: Dependency Scan
+on:
+  workflow_dispatch: {}
+  pull_request: {}
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly
+
+jobs:
+  dependency-check:
+    name: OWASP Dependency Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      pull-requests: write
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: OWASP Dependency Check
+        uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: 'Vulnerable Node.js App'
+          path: '.'
+          format: 'HTML'
+          args: >
+            --enableExperimental
+            --scan .
+            --suppression ./suppression.xml
+            --failOnCVSS 7
+            
+      - name: Upload Test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: Dependency Check Report
+          path: ${{github.workspace}}/reports
+      
+      - name: Create PR Comment
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: dependency-check-results
+          message: |
+            ### OWASP Dependency Check Results
+            
+            The full HTML report has been uploaded as a build artifact.
+            To view it:
+            1. Go to the Actions tab
+            2. Click on this workflow run
+            3. Download the "Dependency Check Report" artifact 
