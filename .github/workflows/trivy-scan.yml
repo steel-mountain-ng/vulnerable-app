@@ -29,15 +29,13 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: 'vulnerable-nodejs-app:${{ github.sha }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          format: 'table'
           severity: 'CRITICAL,HIGH,MEDIUM'
-          
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+          output: 'trivy-results.txt'
+
+      - name: Display Trivy scan results
         if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
+        run: cat trivy-results.txt
           
       - name: Create PR Comment
         if: github.event_name == 'pull_request'
@@ -47,7 +45,10 @@ jobs:
           message: |
             ### Trivy Container Scan Results
             
-            The detailed scan results have been uploaded to the Security tab.
+            ```
+            $(cat trivy-results.txt)
+            ```
+            
             Common issues to look for:
             - Base image vulnerabilities
             - System package vulnerabilities
