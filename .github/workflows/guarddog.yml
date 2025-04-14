@@ -1,8 +1,4 @@
 name: GuardDog npm Scan
-
-
-  
-
 on:
   push:
     branches:
