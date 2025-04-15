@@ -1,9 +1,9 @@
 name: GuardDog npm Scan
+
 on:
   push:
     branches:
       - main
-  workflow_dispatch: {}
   pull_request:
     branches:
       - main
@@ -30,11 +30,21 @@ jobs:
       - name: Install GuardDog
         run: pip install guarddog
 
-      - name: Scan package.json
-        run: guarddog npm verify package.json --output-format sarif > guarddog.sarif
+      - name: Find package.json files
+        id: find-package-json
+        run: |
+          echo "files=$(find . -name 'package.json' -not -path '*/node_modules/*' -type f | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
-      - name: Upload SARIF file to GitHub
+      - name: Scan package.json files
+        run: |
+          mkdir -p scan-results
+          for pkg in ${{ steps.find-package-json.outputs.files }}; do
+            echo "Scanning $pkg..."
+            guarddog npm verify "$pkg" --output-format sarif > "scan-results/$(basename $(dirname $pkg))-guarddog.sarif"
+          done
+
+      - name: Upload SARIF files to GitHub
         uses: github/codeql-action/upload-sarif@v3
         with:
           category: guarddog-npm
-          sarif_file: guarddog.sarif 
+          sarif_file: scan-results 
