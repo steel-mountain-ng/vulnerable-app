@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   security-events: write
   pull-requests: write
 
@@ -17,10 +18,10 @@ jobs:
   security:
     name: Security CI
     uses: steel-mountain-ng/security-workflows/.github/workflows/reusable-security-ci.yml@v1
-    secrets: inherit
     with:
       fail-severity: HIGH
       upload-sarif: true
+      codeql-languages: javascript
       dockerfile: Dockerfile
       context: .
       image-name: local/vulnerable-app:ci

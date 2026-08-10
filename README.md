@@ -44,7 +44,7 @@ Security CI is provided by reusable workflows in
 [`steel-mountain-ng/security-workflows`](https://github.com/steel-mountain-ng/security-workflows)
 via [`.github/workflows/security.yml`](.github/workflows/security.yml):
 
-1. **SAST** — Semgrep (`p/default`, `p/security-audit`, `p/nodejs`)
+1. **SAST** — CodeQL (`security-and-quality`, JavaScript) — no Semgrep token required
 2. **SCA** — Trivy filesystem scan (fails on CRITICAL/HIGH)
 3. **IaC** — Trivy config scan for Dockerfile / misconfigurations (fails on CRITICAL/HIGH)
 4. **Secrets** — Trivy secret scan (fails on findings)
@@ -52,8 +52,6 @@ via [`.github/workflows/security.yml`](.github/workflows/security.yml):
 6. **Supply chain** — [RoguePkg](https://github.com/radioactivetobi/roguepkg) malware detection
 
 The orchestrator ends with a **Security Gate** job. This app is intentionally vulnerable, so the gate is expected to fail — that is the demo.
-
-Optional repo secret: `SEMGREP_APP_TOKEN` (Semgrep Cloud). Public rules work without it.
 
 ## Setup
 1. Clone the repository
