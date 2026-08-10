@@ -46,10 +46,16 @@ via [`.github/workflows/security.yml`](.github/workflows/security.yml):
 
 1. **SAST** — CodeQL (`security-and-quality`, JavaScript) — no Semgrep token required
 2. **SCA** — Trivy filesystem scan (fails on CRITICAL/HIGH)
-3. **IaC** — Trivy config scan for Dockerfile / misconfigurations (fails on CRITICAL/HIGH)
+3. **IaC** — Trivy config scan for Dockerfile / K8s / Terraform misconfigurations (fails on CRITICAL/HIGH)
 4. **Secrets** — Trivy secret scan (fails on findings)
 5. **Container image** — local Docker build + Trivy image scan (fails on CRITICAL/HIGH)
 6. **Supply chain** — [RoguePkg](https://github.com/radioactivetobi/roguepkg) malware detection
+
+Sample findings planted for demos:
+- [`config/secrets.env`](config/secrets.env) — fake AWS/GitHub-style secrets
+- [`deploy/k8s/deployment.yaml`](deploy/k8s/deployment.yaml) — privileged pod, hostNetwork, docker.sock
+- [`infra/main.tf`](infra/main.tf) — public S3, open SG, unencrypted public RDS
+- [`Dockerfile`](Dockerfile) — old base image, root user, embedded AWS env keys
 
 The orchestrator ends with a **Security Gate** job. This app is intentionally vulnerable, so the gate is expected to fail — that is the demo.
 

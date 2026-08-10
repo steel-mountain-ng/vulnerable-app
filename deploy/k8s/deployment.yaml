@@ -1,0 +1,57 @@
+# Intentionally insecure Kubernetes manifests for Trivy IaC demos.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vulnerable-app
+  labels:
+    app: vulnerable-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vulnerable-app
+  template:
+    metadata:
+      labels:
+        app: vulnerable-app
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+        - name: app
+          image: steel-mountain-ng/vulnerable-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            runAsUser: 0
+            readOnlyRootFilesystem: false
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - NET_ADMIN
+                - ALL
+          env:
+            - name: DB_PASSWORD
+              value: "super_secret_password123"
+          volumeMounts:
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vulnerable-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 3000
+  selector:
+    app: vulnerable-app

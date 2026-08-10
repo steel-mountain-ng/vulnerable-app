@@ -1,10 +1,14 @@
+# Intentionally insecure Dockerfile for Trivy IaC / image demos.
 # Using an older base image with known vulnerabilities
 FROM node:14.0.0
+
+# Running healthcheck with curl over HTTP (weak practices stack)
+HEALTHCHECK CMD curl -f http://localhost:3000/ || exit 1
 
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install system packages with known vulnerabilities
+# Install system packages with known vulnerabilities + sshd (attack surface)
 RUN apt-get update && apt-get install -y \
     imagemagick \
     openssh-server \
@@ -28,8 +32,13 @@ RUN useradd -m appuser && \
 # Expose port
 EXPOSE 3000
 
-# Run as root (bad practice)
-# USER appuser  # Commented out intentionally
+# Hardcoded secret in image env (IaC / secret smell)
+ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
+    AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY \
+    NODE_ENV=production
+
+# Run as root (bad practice) — USER intentionally omitted
+USER root
 
 # Start with a vulnerable command
 CMD ["npm", "start"] 
