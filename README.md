@@ -40,29 +40,20 @@ This application includes the following intentional security issues:
    - Unnecessary installed packages
 
 ## Security Scanning Setup
-This project includes GitHub Actions workflows for:
+Security CI is provided by reusable workflows in
+[`steel-mountain-ng/security-workflows`](https://github.com/steel-mountain-ng/security-workflows)
+via [`.github/workflows/security.yml`](.github/workflows/security.yml):
 
-1. **SAST Scanning (Semgrep)**
-   - Detects code-level security issues
-   - Runs on PRs and main branch
-   - Results posted as PR comments
+1. **SAST** — Semgrep (`p/default`, `p/security-audit`, `p/nodejs`)
+2. **SCA** — Trivy filesystem scan (fails on CRITICAL/HIGH)
+3. **IaC** — Trivy config scan for Dockerfile / misconfigurations (fails on CRITICAL/HIGH)
+4. **Secrets** — Trivy secret scan (fails on findings)
+5. **Container image** — local Docker build + Trivy image scan (fails on CRITICAL/HIGH)
+6. **Supply chain** — [RoguePkg](https://github.com/radioactivetobi/roguepkg) malware detection
 
-2. **Secret Scanning (TruffleHog)**
-   - Identifies hardcoded secrets and credentials
-   - Scans entire git history
-   - Annotates findings in PR
+The orchestrator ends with a **Security Gate** job. This app is intentionally vulnerable, so the gate is expected to fail — that is the demo.
 
-3. **Dependency Scanning (OWASP Dependency-Check)**
-   - Identifies vulnerable dependencies
-   - Generates detailed HTML reports
-   - Weekly scheduled scans
-
-4. **Container Scanning (Trivy)**
-   - Scans container images for vulnerabilities
-   - Checks both OS packages and application dependencies
-   - Identifies misconfigurations
-   - Results uploaded to Security tab
-   - Weekly scheduled scans
+Optional repo secret: `SEMGREP_APP_TOKEN` (Semgrep Cloud). Public rules work without it.
 
 ## Setup
 1. Clone the repository
