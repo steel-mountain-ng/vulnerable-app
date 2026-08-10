@@ -59,6 +59,9 @@ Sample findings planted for demos:
 
 The orchestrator ends with a **Security Gate** job. This app is intentionally vulnerable, so the gate is expected to fail — that is the demo.
 
+On pull requests, **AI triage** (OpenRouter) posts an advisory sticky comment with TP/FP, exploitability, and reachability notes, and may open draft fix PRs for allowlisted items. Set repo secret `OPENROUTER_API_KEY` for full LLM triage; without it, heuristic triage still comments. AI never overrides the Security Gate.
+
+
 ## Setup
 1. Clone the repository
 2. Install dependencies:
