@@ -1,0 +1,26 @@
+name: Alert Manager
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly backlog hygiene (LOWs + AI FP review)
+    - cron: '15 3 * * 1'
+
+permissions:
+  contents: write
+  pull-requests: write
+  security-events: write
+
+jobs:
+  alert-manager:
+    name: Manage Code Scanning alerts
+    uses: steel-mountain-ng/security-workflows/.github/workflows/reusable-alert-manager.yml@v1
+    secrets: inherit
+    with:
+      dismiss-lows: true
+      ai-review: true
+      open-fix-prs: true
+      model: openai/gpt-4o-mini
+      max-alerts: '40'
+      fp-confidence: '0.85'
+      fix-confidence: '0.7'

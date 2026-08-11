@@ -61,6 +61,8 @@ The orchestrator ends with a **Security Gate** job. This app is intentionally vu
 
 On pull requests, **AI triage** (OpenRouter) posts an advisory sticky comment with TP/FP, exploitability, and reachability notes, and may open draft fix PRs for allowlisted items. Set repo secret `OPENROUTER_API_KEY` for full LLM triage; without it, heuristic triage still comments. AI never overrides the Security Gate.
 
+**Alert manager** ([`.github/workflows/alert-manager.yml`](.github/workflows/alert-manager.yml)) runs on `workflow_dispatch` / weekly schedule: auto-dismisses all open **LOW** Code Scanning alerts, AI-reviews the rest for high-confidence false positives, and can open draft fix PRs.
+
 
 ## Setup
 1. Clone the repository
