@@ -21,6 +21,8 @@ jobs:
       ai-review: true
       open-fix-prs: true
       model: openai/gpt-4o-mini
-      max-alerts: '40'
+      # 0 = send every open non-LOW alert to AI (chunked)
+      max-alerts: '0'
+      batch-size: '25'
       fp-confidence: '0.85'
       fix-confidence: '0.7'
