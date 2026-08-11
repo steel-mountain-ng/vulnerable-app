@@ -23,6 +23,6 @@ jobs:
       model: openai/gpt-4o-mini
       # 0 = send every open non-LOW alert to AI (chunked)
       max-alerts: '0'
-      batch-size: '25'
+      batch-size: '40'
       fp-confidence: '0.85'
       fix-confidence: '0.7'
