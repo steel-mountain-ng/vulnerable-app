@@ -27,6 +27,6 @@ jobs:
       context: .
       image-name: local/vulnerable-app:ci
       run-ai-triage: true
-      ai-model: openai/gpt-4o-mini
+      ai-model: z-ai/glm-5.2
       ai-max-findings: '25'
       ai-open-fix-prs: true
