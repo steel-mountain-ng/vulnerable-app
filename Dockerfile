@@ -38,7 +38,6 @@ ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
     NODE_ENV=production
 
 # Run as root (bad practice) — USER intentionally omitted
-USER root
-
+USER appuser
 # Start with a vulnerable command
 CMD ["npm", "start"] 
