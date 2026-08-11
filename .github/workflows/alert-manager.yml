@@ -20,7 +20,7 @@ jobs:
       dismiss-lows: true
       ai-review: true
       open-fix-prs: true
-      model: openai/gpt-4o-mini
+      model: deepseek/deepseek-v4-flash-0731
       # 0 = send every open non-LOW alert to AI (chunked)
       max-alerts: '0'
       batch-size: '40'
