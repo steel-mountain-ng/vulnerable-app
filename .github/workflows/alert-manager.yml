@@ -20,9 +20,12 @@ jobs:
       dismiss-lows: true
       ai-review: true
       open-fix-prs: true
-      model: deepseek/deepseek-v4-flash-0731
-      # 0 = send every open non-LOW alert to AI (chunked)
+      # OpenRouter Auto Router picks a capable/fast model per batch
+      model: openrouter/auto
+      cost-tier: low
+      # 0 = send every open non-LOW alert (multi-agent batched)
       max-alerts: '0'
       batch-size: '40'
+      concurrency: '8'
       fp-confidence: '0.85'
       fix-confidence: '0.7'
