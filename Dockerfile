@@ -1,7 +1,6 @@
 # Intentionally insecure Dockerfile for Trivy IaC / image demos.
 # Using an older base image with known vulnerabilities
-FROM node:14.0.0
-
+FROM node:20-bookworm-slim
 # Running healthcheck with curl over HTTP (weak practices stack)
 HEALTHCHECK CMD curl -f http://localhost:3000/ || exit 1
 
@@ -38,7 +37,6 @@ ENV AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE \
     NODE_ENV=production
 
 # Run as root (bad practice) — USER intentionally omitted
-USER root
-
+USER appuser
 # Start with a vulnerable command
 CMD ["npm", "start"] 
