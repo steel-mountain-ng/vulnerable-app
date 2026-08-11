@@ -20,9 +20,11 @@ jobs:
       dismiss-lows: true
       ai-review: true
       open-fix-prs: true
-      # OpenRouter Auto Router picks a capable/fast model per batch
+      # Tier 1: bulk classify via OpenRouter Auto (medium)
       model: openrouter/auto
-      cost-tier: low
+      cost-tier: medium
+      # Tier 2: FP confidence + dismiss gate
+      fp-model: anthropic/claude-opus-5
       # 0 = send every open non-LOW alert (multi-agent batched)
       max-alerts: '0'
       batch-size: '40'
